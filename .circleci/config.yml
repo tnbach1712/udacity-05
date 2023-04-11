@@ -15,7 +15,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [app-build]
-      - run: npm install -g typescript
+      - run: sudo npm install -g typescript
       - run:
           name: Build application
           command: |
