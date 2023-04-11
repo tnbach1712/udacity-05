@@ -1,0 +1,46 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.12.1
+  jq: circleci/jq@2.2.0
+  aws-cli: circleci/aws-cli@3.1
+  node: circleci/node@5.1.0
+commands: []
+
+jobs:
+  build-app:
+    docker:
+      - image: circleci/node:16.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [app-build]
+      - run:
+          name: Build application
+          command: |
+            yarn install
+            yarn build
+      - save_cache:
+          paths: [node_modules]
+          key: app-build
+  lint:
+    docker:
+      - image: circleci/node:16.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [app-build]
+      - run:
+          name: Lint application
+          command: |
+            yarn lint
+
+workflows:
+
+  default:
+    jobs:
+      - build-app
+      - lint:
+          requires:
+            - build-app
+      
