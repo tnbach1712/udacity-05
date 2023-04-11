@@ -12,7 +12,7 @@
     "lint": "eslint . --ext .js,.ts,.tsx --max-warnings 0",
     "format": "prettier --write .",
     "tsc": "tsc -p tsconfig.json --noEmit",
-    "deploy": "npm run build && gh-pages -d dist/react-2048"
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "keywords": [
     "React",
@@ -21,7 +21,7 @@
     "style-components",
     "pwa"
   ],
-  "author": "Kai Wang",
+  "author": "bachtn",
   "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",

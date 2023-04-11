@@ -1,9 +1,12 @@
-FROM nginx:1.23.4-alpine-slim
+FROM node:16.18.1-alpine
 
 WORKDIR /app
 
-COPY 2048 /usr/share/nginx/html
+COPY . .
 
-EXPOSE 80
+RUN yarn install
 
-CMD ["nginx", "-g", "daemon off;"]
+# EXPOSE 80
+
+# CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "yarn", "start" ]
