@@ -1,11 +1,11 @@
 version: 2.1
 
-orbs:
-  slack: circleci/slack@4.12.1
-  jq: circleci/jq@2.2.0
-  aws-cli: circleci/aws-cli@3.1
-  node: circleci/node@5.1.0
-commands: []
+# orbs:
+#   slack: circleci/slack@4.12.1
+#   jq: circleci/jq@2.2.0
+#   aws-cli: circleci/aws-cli@3.1
+#   node: circleci/node@5.1.0
+# commands: []
 
 jobs:
   build-app:
@@ -43,4 +43,3 @@ workflows:
       - lint:
           requires:
             - build-app
-      
