@@ -86,10 +86,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - v1-{{ .Branch }}-{{ epoch }}
-        paths:
-          - /caches/bachtn-udacity-05.tar
+          keys:
+            - v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/bachtn-udacity-05.tar
       - run:
           name: Install dependenciess
           command: |
@@ -109,6 +109,7 @@ jobs:
             docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:latest
+
 workflows:
 
   default:
