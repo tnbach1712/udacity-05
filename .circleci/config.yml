@@ -59,6 +59,7 @@ jobs:
           name: Install dependenciess
           command: |
             apk add --update docker openrc
+            npm install -g typescript
       - run:
           name: Load Docker image layer cache
           command: |
