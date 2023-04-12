@@ -119,6 +119,30 @@ jobs:
             docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:latest
+  deploy-eks:
+    docker:
+      - image: alpine:latest
+    steps:
+      - checkout
+      - run:
+          name: Install depens
+          command: |
+            apk add curl
+            apk add aws-cli
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            mv ./kubectl /usr/bin/kubectl
+            apk add helm
+      - run:
+          name: update kube config
+          command: |
+            aws eks update-kubeconfig --name $CLUSTER
+            kubectl config use $CONTEXT
+      - run:
+          name: helm deploy
+          command: |
+            helm upgrade -n dev --install udacity-05 -f ./udacity-05/aws/values.yaml udacity-05 
+
 workflows:
 
   default:
@@ -137,3 +161,6 @@ workflows:
       - push-image:
           requires:
             - build-image
+      - deploy-eks:
+          requires:
+            - push-image
