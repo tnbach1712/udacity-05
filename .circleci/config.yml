@@ -101,14 +101,14 @@ jobs:
           name: login hub
           command: |
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - run:
-          name: push images
-          command: |
-            TAG_VERSION=${CIRCLE_WORKFLOW_ID:0:7}
-            docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:latest
-            docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
-            docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
-            docker push abc1zbq/bachtn-udacity-05:latest
+      # - run:
+      #     name: push images
+      #     command: |
+      #       TAG_VERSION=${CIRCLE_WORKFLOW_ID:0:7}
+      #       docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:latest
+      #       docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+      #       docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+      #       docker push abc1zbq/bachtn-udacity-05:latest
 
 workflows:
 
