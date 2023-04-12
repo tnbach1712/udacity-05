@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn install
+RUN install -g typescript && \
+    yarn install && \
+    yarn build
 
 # EXPOSE 80
 
