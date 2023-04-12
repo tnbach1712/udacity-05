@@ -59,17 +59,15 @@ jobs:
           name: Install dependenciess
           command: |
             apk add --update docker openrc
+      - run: npm install -g typescript
       - run:
-          name: Load Docker image layer cache
+          name: Build application
           command: |
-            set +o pipefail
-            docker load -i /caches/bachtn-udacity-05.tar | true
+            yarn install
+            yarn build
       - run:
           name: Build images
           command: |
-            npm install -g typescript
-            yarn install
-            yarn build
             docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
       - run:
           name: Save Docker image layer cache
