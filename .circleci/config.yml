@@ -138,6 +138,8 @@ jobs:
           command: |
             aws eks update-kubeconfig --name $CLUSTER
             kubectl config use $CONTEXT
+            echo $(pwd)
+            echo $(ls)
       - run:
           name: helm deploy
           command: |
