@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN install -g typescript && \
+RUN npm install -g typescript && \
     yarn install && \
     yarn build
 
