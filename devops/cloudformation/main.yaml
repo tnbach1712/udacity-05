@@ -126,7 +126,7 @@ Resources:
       KubernetesNetworkConfig:
         IpFamily: ipv4
         ServiceIpv4Cidr: 192.168.0.0/16
-      Name: bachtn-udacity-cluster
+      Name: udacity-05
       ResourcesVpcConfig:
         EndpointPrivateAccess: false
         EndpointPublicAccess: true
