@@ -82,15 +82,6 @@ jobs:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/bachtn-udacity-05.tar
-      # - deploy:
-          # name: Push application Docker image
-          # command: |
-          #   if [ "${CIRCLE_BRANCH}" == "master" ]; then
-          #     login="$(aws ecr get-login)"
-          #     ${login}
-          #     docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-          #     docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-          #   fi
   push-image:
     docker:
       - image: docker:17.05.0-ce-git
@@ -106,7 +97,7 @@ jobs:
               docker-compose==1.12.0 \
               awscli==1.11.76
       - restore_cache:
-          keys: v1-{{ .Branch }}-{{ epoch }}
+          keys: v1-{{ .Branch }}
       - run:
           name: Load Docker image layer cache
           command: |
