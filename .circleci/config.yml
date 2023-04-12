@@ -63,7 +63,7 @@ jobs:
       - run:
           name: Install dependenciess
           command: |
-            apk add --update docker openrc
+            apk add --update --no-cache docker openrc
             rc-update add docker boot
       - run:
           name: Build images
