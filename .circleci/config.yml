@@ -72,7 +72,8 @@ jobs:
             echo "---------------------"
             echo $(service docker status)
             echo "---------------------"
-            service docker restart
+            echo $(service docker stop)
+            echo $(service docker restart)
             echo "---------------------"
             touch /run/openrc/softlevel
             echo "---------------------"
