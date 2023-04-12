@@ -91,63 +91,27 @@ jobs:
           #     docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
           #     docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
           #   fi
-
-  build-image2:
-    docker:
-      - image: alpine:3.16
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-            - app-build
-      - run:
-          name: Install dependenciess
-          command: |
-            apk add --update --no-cache docker openrc
-            rc-update add docker boot
-            usermod -a -G docker $USER
-      - run:
-          name: Build images
-          command: |
-            echo $(docker version)
-            echo "---------------------"
-            echo $(service docker status)
-            echo "---------------------"
-            echo $(service docker stop)
-            echo $(service docker restart)
-            echo "---------------------"
-            touch /run/openrc/softlevel
-            echo "---------------------"
-            
-            docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p /caches
-            docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
-      - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/bachtn-udacity-05.tar
   push-image:
     docker:
-      - image: alpine:3.16
+      - image: docker:17.05.0-ce-git
     steps:
       - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.12.0 \
+              awscli==1.11.76
       - restore_cache:
           keys: v1-{{ .Branch }}-{{ epoch }}
-          paths:
-            - /caches/bachtn-udacity-05.tar
       - run:
-          name: Install dependenciess
+          name: Load Docker image layer cache
           command: |
-            apk add --update docker openrc
-            rc-update add docker boot
-      - run:
-          name: unzip images
-          command: |
-            docker image load --input /caches/bachtn-udacity-05.tar
+            set +o pipefail
+            docker load -i /caches/bachtn-udacity-05.tar | true
       - run:
           name: login hub
           command: |
@@ -160,6 +124,37 @@ jobs:
             docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
             docker push abc1zbq/bachtn-udacity-05:latest
+
+  # push-image:
+  #   docker:
+  #     - image: alpine:3.16
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys: v1-{{ .Branch }}-{{ epoch }}
+  #         paths:
+  #           - /caches/bachtn-udacity-05.tar
+  #     - run:
+  #         name: Install dependenciess
+  #         command: |
+  #           apk add --update docker openrc
+  #           rc-update add docker boot
+  #     - run:
+  #         name: unzip images
+  #         command: |
+  #           docker image load --input /caches/bachtn-udacity-05.tar
+  #     - run:
+  #         name: login hub
+  #         command: |
+  #           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  #     - run:
+  #         name: push images
+  #         command: |
+  #           TAG_VERSION=${CIRCLE_WORKFLOW_ID:0:7}
+  #           docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:latest
+  #           docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+  #           docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+  #           docker push abc1zbq/bachtn-udacity-05:latest
 
 workflows:
 
