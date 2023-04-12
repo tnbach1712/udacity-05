@@ -50,21 +50,21 @@ jobs:
       - image: node:16-alpine3.16
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/bachtn-udacity-05.tar
-      - run:
-          name: Install dependenciess
-          command: |
-            apk add --update docker openrc
+      # - restore_cache:
+      #     keys:
+      #       - v1-{{ .Branch }}
+      #     paths:
+      #       - /caches/bachtn-udacity-05.tar
       - run: npm install -g typescript
       - run:
           name: Build application
           command: |
             yarn install
             yarn build
+      - run:
+          name: Install dependenciess
+          command: |
+            apk add --update docker openrc
       - run:
           name: Build images
           command: |
@@ -123,3 +123,6 @@ workflows:
           requires:
             - lint
             - scan
+      - push-image:
+          requires:
+            - build-image
