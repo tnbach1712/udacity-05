@@ -79,7 +79,7 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
       - save_cache:
-          key: v1-{{ .Branch }}-{{ ${CIRCLE_WORKFLOW_ID:0:7} }}
+          key: v1-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
             - /caches/bachtn-udacity-05.tar
 
@@ -91,7 +91,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - v1-{{ .Branch }}-{{ ${CIRCLE_WORKFLOW_ID:0:7} }}
+            - v1-{{ .Branch }}-{{ .Environment.CIRCLE_WORKFLOW_ID }}
           paths:
             - /caches/bachtn-udacity-05.tar
       - run:
