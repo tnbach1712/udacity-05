@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    base: "/", // isProd ? '/react-2048/' : '/',
+    base: "/",
     server: {
       port: 3000,
     },
