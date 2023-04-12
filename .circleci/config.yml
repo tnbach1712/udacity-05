@@ -65,6 +65,7 @@ jobs:
           command: |
             apk add --update --no-cache docker openrc
             rc-update add docker boot
+            usermod -a -G docker $USER
       - run:
           name: Build images
           command: |
@@ -77,6 +78,7 @@ jobs:
             echo "---------------------"
             touch /run/openrc/softlevel
             echo "---------------------"
+            
             docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
       - run:
           name: Save Docker image layer cache
