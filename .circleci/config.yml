@@ -68,6 +68,7 @@ jobs:
       - run:
           name: Build images
           command: |
+            service docker restart
             echo $(service docker status)
             docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
       - run:
