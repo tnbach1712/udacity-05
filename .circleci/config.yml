@@ -69,8 +69,13 @@ jobs:
           name: Build images
           command: |
             echo $(docker version)
+            echo "---------------------"
             echo $(service docker status)
+            echo "---------------------"
             service docker restart
+            echo "---------------------"
+            touch /run/openrc/softlevel
+            echo "---------------------"
             docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
       - run:
           name: Save Docker image layer cache
