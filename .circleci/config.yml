@@ -61,7 +61,7 @@ jobs:
               awscli==1.11.76
       - restore_cache:
           keys:
-            - v1-{{ .Branch }}
+            - v1-{{ .Branch }}-{{ checksum "vite.config.ts"}}
           paths:
             - /caches/bachtn-udacity-05.tar
       - run:
@@ -79,13 +79,9 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
       - save_cache:
-          key: v1-{{ .Branch }}
+          key: v1-{{ .Branch }}-{{ ${CIRCLE_WORKFLOW_ID:0:7} }}
           paths:
             - /caches/bachtn-udacity-05.tar
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - project/.circleci/ansible/inventory.txt
 
   push-image:
     docker:
@@ -95,7 +91,7 @@ jobs:
       - setup_remote_docker
       - restore_cache:
           keys:
-            - v1-{{ .Branch }}
+            - v1-{{ .Branch }}-{{ ${CIRCLE_WORKFLOW_ID:0:7} }}
           paths:
             - /caches/bachtn-udacity-05.tar
       - run:
