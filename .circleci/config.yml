@@ -82,7 +82,7 @@ jobs:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/bachtn-udacity-05.tar
-      - deploy:
+      # - deploy:
           # name: Push application Docker image
           # command: |
           #   if [ "${CIRCLE_BRANCH}" == "master" ]; then
