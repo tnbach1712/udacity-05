@@ -64,6 +64,7 @@ jobs:
           name: Install dependenciess
           command: |
             apk add --update docker openrc
+            rc-update add docker boot
       - run:
           name: Build images
           command: |
@@ -91,6 +92,7 @@ jobs:
           name: Install dependenciess
           command: |
             apk add --update docker openrc
+            rc-update add docker boot
       - run:
           name: unzip images
           command: |
