@@ -67,6 +67,7 @@ jobs:
       - run:
           name: Build images
           command: |
+            npm install -g typescript
             yarn install
             yarn build
             docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
