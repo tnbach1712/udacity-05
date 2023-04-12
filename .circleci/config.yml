@@ -51,10 +51,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - v1-{{ .Branch }}
-        paths:
-          - /caches/bachtn-udacity-05.tar
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/bachtn-udacity-05.tar
       - run:
           name: Install dependenciess
           command: |
