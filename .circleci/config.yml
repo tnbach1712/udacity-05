@@ -96,11 +96,12 @@ jobs:
             apk add --update docker openrc
       - run:
           name: unzip images
-          command: docker image load --input /caches/bachtn-udacity-05.tar
+          command: |
+            docker image load --input /caches/bachtn-udacity-05.tar
       - run:
           name: login hub
           command: |
-            docker login -u $DOCKER_USERNAME -p DOCKER_PASSWORD
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run:
           name: push images
           command: |
