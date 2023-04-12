@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY . .
 # RUN rm -r node_modules
-RUN sudo npm install -g typescript && \
+RUN npm install -g typescript && \
+    yarn add typescript --dev && \
     yarn install && \
     yarn build
 
