@@ -86,8 +86,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - v1-{{ .Branch }}-{{ epoch }}
+          keys: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/bachtn-udacity-05.tar
       - run:
