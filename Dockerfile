@@ -1,10 +1,10 @@
-FROM node:16
+FROM node:16.18.1-alpine3.16
 
 WORKDIR /app
 
 COPY . .
-
-RUN npm install -g typescript && \
+# RUN rm -r node_modules
+RUN sudo npm install -g typescript && \
     yarn install && \
     yarn build
 
