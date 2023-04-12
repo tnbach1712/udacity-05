@@ -52,7 +52,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-master
+            - v1-{{ .Branch }}
           paths:
             - /caches/bachtn-udacity-05.tar
       - run:
@@ -76,7 +76,8 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
       - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
+          key:
+            -  v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/bachtn-udacity-05.tar
   push-image:
