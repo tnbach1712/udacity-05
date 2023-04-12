@@ -9,4 +9,4 @@ RUN yarn install
 # EXPOSE 80
 
 # CMD ["nginx", "-g", "daemon off;"]
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "yarn", "preview" ]

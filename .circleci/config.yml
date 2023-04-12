@@ -1,11 +1,9 @@
 version: 2.1
 
-# orbs:
-#   slack: circleci/slack@4.12.1
-#   jq: circleci/jq@2.2.0
-#   aws-cli: circleci/aws-cli@3.1
-#   node: circleci/node@5.1.0
-# commands: []
+orbs:
+  slack: circleci/slack@4.12.1
+  jq: circleci/jq@2.2.0
+  aws-cli: circleci/aws-cli@3.1
 
 jobs:
   build-app:
@@ -35,7 +33,81 @@ jobs:
           name: Lint application
           command: |
             yarn lint
+  scan:
+    docker:
+      - image: node:16-alpine3.16
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [app-build]
+      - run:
+          name: Scan
+          command: |
+            yarn audit
 
+  build-image:
+    docker:
+      -image: node:16-alpine3.16
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - v1-{{ .Branch }}
+        paths:
+          - /caches/bachtn-udacity-05.tar
+      - run:
+          name: Install dependenciess
+          command: |
+            apk add --update docker openrc
+      - run:
+        name: Load Docker image layer cache
+        command: |
+          set +o pipefail
+          docker load -i /caches/bachtn-udacity-05.tar | true
+      - run:
+          name: Build images
+          command: |
+            yarn install
+            yarn build
+            docker build --cache-from=bachtn-udacity-05 -t bachtn-udacity-05 .
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/bachtn-udacity-05.tar
+  push-image:
+    docker:
+      - image:
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - v1-{{ .Branch }}-{{ epoch }}
+        paths:
+          - /caches/bachtn-udacity-05.tar
+      - run:
+          name: Install dependenciess
+          command: |
+            apk add --update docker openrc
+      - run:
+          name: unzip images
+          command: docker image load --input /caches/bachtn-udacity-05.tar
+      - run:
+          name: login hub
+          command: |
+            docker login -u $DOCKER_USERNAME -p DOCKER_PASSWORD
+      - run:
+          name: push images
+          command: |
+            TAG_VERSION=${CIRCLE_WORKFLOW_ID:0:7}
+            docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:latest
+            docker tag bachtn-udacity-05 abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+            docker push abc1zbq/bachtn-udacity-05:${TAG_VERSION}
+            docker push abc1zbq/bachtn-udacity-05:latest
 workflows:
 
   default:
@@ -44,3 +116,10 @@ workflows:
       - lint:
           requires:
             - build-app
+      - scan:
+          requires:
+            - build-app
+      - build-image:
+          requires:
+            - lint
+            - scan
