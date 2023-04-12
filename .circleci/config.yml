@@ -79,9 +79,14 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/bachtn-udacity-05.tar bachtn-udacity-05
       - save_cache:
-          key: v1-{{ .Branch }}-{{ epoch }}
+          key: v1-{{ .Branch }}
           paths:
             - /caches/bachtn-udacity-05.tar
+      # - persist_to_workspace:
+      #     root: ~/
+      #     paths:
+      #       - project/.circleci/ansible/inventory.txt
+
   push-image:
     docker:
       - image: docker:17.05.0-ce-git
