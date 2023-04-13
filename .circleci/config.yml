@@ -143,6 +143,7 @@ jobs:
       - run:
           name: helm deploy
           command: |
+            kubectl create namespace dev || true
             helm upgrade -n dev --install udacity-05 -f ./udacity-05/values.yaml udacity-05 
 
 workflows:
